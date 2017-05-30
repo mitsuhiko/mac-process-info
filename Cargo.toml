@@ -1,0 +1,14 @@
+[package]
+name = "mac-process-info"
+version = "0.1.0"
+authors = ["Armin Ronacher <armin.ronacher@active-4.com>"]
+keywords = ["getppid", "pid", "process-name", "process", "parent"]
+description = "Returns basic process info on OS X"
+homepage = "https://github.com/mitsuhiko/mac-process-info"
+documentation = "https://docs.rs/mac-process-info/"
+build = "build.rs"
+license = "BSD-3-Clause"
+readme = "README.md"
+
+[build-dependencies]
+gcc = "0.3"
