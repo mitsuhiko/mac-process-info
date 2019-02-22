@@ -2,10 +2,10 @@
 //!
 //! In particular this can return the parent pid of a process, the name
 //! of a process or the loaded image.
-use std::io;
-use std::path::PathBuf;
-use std::os::unix::ffi::OsStrExt;
 use std::ffi::{CStr, OsStr};
+use std::io;
+use std::os::unix::ffi::OsStrExt;
+use std::path::PathBuf;
 
 const PROC_PIDPATHINFO_MAXSIZE: usize = 4096;
 
@@ -36,9 +36,11 @@ pub fn get_parent_pid(id: u32) -> Option<u32> {
 pub fn get_process_path(id: u32) -> io::Result<PathBuf> {
     let mut buf = [0i8; PROC_PIDPATHINFO_MAXSIZE];
     unsafe {
-        if macprocinfo_getpidpath(id as i32, buf.as_mut_ptr(),
-                                  PROC_PIDPATHINFO_MAXSIZE as u32) != 0 {
-            Ok(PathBuf::from(OsStr::from_bytes(CStr::from_ptr(buf.as_ptr()).to_bytes())))
+        if macprocinfo_getpidpath(id as i32, buf.as_mut_ptr(), PROC_PIDPATHINFO_MAXSIZE as u32) != 0
+        {
+            Ok(PathBuf::from(OsStr::from_bytes(
+                CStr::from_ptr(buf.as_ptr()).to_bytes(),
+            )))
         } else {
             Err(io::Error::last_os_error())
         }
@@ -49,10 +51,9 @@ pub fn get_process_path(id: u32) -> io::Result<PathBuf> {
 pub fn get_process_name(id: u32) -> io::Result<String> {
     let mut buf = [0i8; PROC_PIDPATHINFO_MAXSIZE];
     unsafe {
-        if macprocinfo_getpidname(id as i32, buf.as_mut_ptr(),
-                                  PROC_PIDPATHINFO_MAXSIZE as u32) != 0 {
-            Ok(String::from_utf8_lossy(
-                CStr::from_ptr(buf.as_ptr()).to_bytes()).to_string())
+        if macprocinfo_getpidname(id as i32, buf.as_mut_ptr(), PROC_PIDPATHINFO_MAXSIZE as u32) != 0
+        {
+            Ok(String::from_utf8_lossy(CStr::from_ptr(buf.as_ptr()).to_bytes()).to_string())
         } else {
             Err(io::Error::last_os_error())
         }
