@@ -59,3 +59,13 @@ pub fn get_process_name(id: u32) -> io::Result<String> {
         }
     }
 }
+
+#[test]
+fn test_basic() {
+    let pid = std::process::id();
+    let parent = get_parent_pid(pid).unwrap();
+    let title_me = get_process_name(pid).unwrap();
+    let title_parent = get_process_name(parent).unwrap();
+    assert!(title_me.starts_with("mac_process_info"));
+    assert_eq!(title_parent, "cargo");
+}

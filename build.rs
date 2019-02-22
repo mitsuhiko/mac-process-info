@@ -1,6 +1,5 @@
-extern crate gcc;
-
 fn main() {
-    gcc::compile_library("libmacproc.a", &["src/macproc.c"]);
-    println!("cargo:rustc-link-lib=macproc");
+    cc::Build::new()
+        .file("src/macproc.c")
+        .compile("macproc");
 }
